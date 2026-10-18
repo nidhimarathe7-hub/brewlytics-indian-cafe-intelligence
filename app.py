@@ -45,20 +45,55 @@ div[data-testid="stMetric"] { background:#fff; border:1px solid #e9e2d8; border-
 DATA_PATH = Path(__file__).parent / "data" / "cafe_reviews_cleaned.csv"
 
 @st.cache_data
+
+@st.cache_data
 def load_data():
-    if DATA_PATH.exists():
-        d = pd.read_csv(DATA_PATH)
-    else:
-        d = pd.read_csv("data/cafe_reviews_cleaned.csv")
-    for c in ["Name", "Cuisine", "City", "Review", "Price_Tier", "Rating_Band", "Sentiment_Label"]:
+    from pathlib import Path
+
+    base_dir = Path(__file__).parent
+    possible_paths = [
+        base_dir / "data" / "cafe_reviews_cleaned.csv",
+        base_dir / "cafe_reviews_cleaned.csv",
+    ]
+
+    csv_path = next(
+        (path for path in possible_paths if path.exists()),
+        None
+    )
+
+    if csv_path is None:
+        raise FileNotFoundError(
+            "Dataset not found. Upload cafe_reviews_cleaned.csv "
+            "to the repository root or the data folder."
+        )
+
+    d = pd.read_csv(csv_path)
+
+    for c in [
+        "Name", "Cuisine", "City", "Review",
+        "Price_Tier", "Rating_Band", "Sentiment_Label"
+    ]:
         if c in d.columns:
             d[c] = d[c].fillna("").astype(str)
-    d["Overall_Rating"] = pd.to_numeric(d["Overall_Rating"], errors="coerce")
-    d["Rate for two"] = pd.to_numeric(d["Rate for two"], errors="coerce")
-    d["Review_Length"] = pd.to_numeric(d["Review_Length"], errors="coerce")
-    d["Cuisine_Count"] = pd.to_numeric(d["Cuisine_Count"], errors="coerce")
-    d["Review_Opportunity_Score"] = pd.to_numeric(d["Review_Opportunity_Score"], errors="coerce")
+
+    d["Overall_Rating"] = pd.to_numeric(
+        d["Overall_Rating"], errors="coerce"
+    )
+    d["Rate for two"] = pd.to_numeric(
+        d["Rate for two"], errors="coerce"
+    )
+    d["Review_Length"] = pd.to_numeric(
+        d["Review_Length"], errors="coerce"
+    )
+    d["Cuisine_Count"] = pd.to_numeric(
+        d["Cuisine_Count"], errors="coerce"
+    )
+    d["Review_Opportunity_Score"] = pd.to_numeric(
+        d["Review_Opportunity_Score"], errors="coerce"
+    )
+
     return d
+
 
 df = load_data()
 
