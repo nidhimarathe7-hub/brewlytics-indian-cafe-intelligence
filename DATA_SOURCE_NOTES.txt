@@ -1,0 +1,5 @@
+Dataset file: reviews.csv (provided by project owner inside archive (2).zip)
+Columns observed: Index, Name, Overall_Rating, Cuisine, Rate for two, City, Review
+Rows in original file: 775
+Date coverage: no review date column; cannot verify 2022–2026 coverage from this file.
+Currency assumption: listed prices appear to be INR based on dataset context; confirm against the original source page before making a formal provenance claim.
